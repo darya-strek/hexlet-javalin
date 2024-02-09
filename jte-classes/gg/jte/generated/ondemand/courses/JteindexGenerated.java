@@ -4,7 +4,7 @@ public final class JteindexGenerated {
 	public static final String JTE_NAME = "courses/index.jte";
 	public static final int[] JTE_LINE_INFO = {0,0,1,1,1,12,12,12,12,13,13,15,15,16,16,18,18,18,18,18,18,18,19,19,19,21,21,22,22,24};
 	public static void render(gg.jte.html.HtmlTemplateOutput jteOutput, gg.jte.html.HtmlInterceptor jteHtmlInterceptor, CoursesPage page) {
-		jteOutput.writeContent("\r\n<!doctype html>\r\n\r\n<html>\r\n    <head>\r\n        <meta charset=\"utf-8\" />\r\n        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\r\n        <title>Hexlet</title>\r\n    </head>\r\n    <body>\r\n        <h1>");
+		jteOutput.writeContent("\r\n<!doctype html>\r\n\r\n<html lang=\"en\">\r\n    <head>\r\n        <meta charset=\"utf-8\" />\r\n        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\r\n        <title>Hexlet</title>\r\n    </head>\r\n    <body>\r\n        <h1>");
 		jteOutput.setContext("h1", null);
 		jteOutput.writeUserContent(page.getHeader());
 		jteOutput.writeContent("</h1>\r\n        ");

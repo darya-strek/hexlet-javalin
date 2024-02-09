@@ -34,7 +34,7 @@ public class HelloWorld {
 
         app.get("/courses", ctx -> {
             var courses = CourseRepository.getEntities();
-            var header = "Все курсы по программированию";
+            var header = "There are courses of programming";
             var page = new CoursesPage(courses, header);
             ctx.render("courses/index.jte", Collections.singletonMap("page", page));
         });
