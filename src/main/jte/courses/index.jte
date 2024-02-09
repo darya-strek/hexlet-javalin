@@ -1,0 +1,25 @@
+@import org.example.hexlet.dto.courses.CoursesPage
+@param CoursesPage page
+
+<!doctype html>
+
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Hexlet</title>
+    </head>
+    <body>
+        <h1>${page.getHeader()}</h1>
+        @if(page.getCourses().isEmpty())
+            <p>No any courses</p>
+        @else
+            @for(var course : page.getCourses())
+               <div>
+                   <h2><a href="/courses/${course.getId()}">${course.getName()}</a></h2>
+                   <p>${course.getDescription()}</p>
+               </div>
+            @endfor
+        @endif
+    </body>
+</html>
