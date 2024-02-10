@@ -39,6 +39,10 @@ public class HelloWorld {
             ctx.render("courses/index.jte", Collections.singletonMap("page", page));
         });
 
+        app.get("/", ctx -> {
+            ctx.render("layout/example.jte");
+        });
+
         app.start(7070); // Стартуем веб-сервер
     }
 }
