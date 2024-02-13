@@ -27,6 +27,9 @@ dependencies {
     testCompileOnly ("org.projectlombok:lombok:1.18.30")
     testAnnotationProcessor ("org.projectlombok:lombok:1.18.30")
 
+    implementation("org.apache.commons:commons-text:1.11.0")
+    implementation("com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer:20180219.1")
+
     implementation("gg.jte:jte:3.0.1")
     implementation("io.javalin:javalin-rendering:5.6.2")
     implementation("io.javalin:javalin:5.6.1")

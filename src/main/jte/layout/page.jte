@@ -1,6 +1,7 @@
 @import gg.jte.Content
 @import org.example.hexlet.dto.courses.CoursesPage
 @import org.example.hexlet.dto.courses.CoursePage
+@import org.example.hexlet.dto.users.UserPage
 
 @param Content content
 @param Content footer = null

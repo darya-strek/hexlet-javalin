@@ -1,13 +1,18 @@
 package org.example.hexlet;
 
 import io.javalin.Javalin;
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.util.Collections;
 
 import org.example.hexlet.dto.courses.CoursesPage;
+import org.example.hexlet.dto.users.UserPage;
 import org.example.hexlet.model.Course;
 import org.example.hexlet.dto.courses.CoursePage;
+import org.example.hexlet.model.User;
 import org.example.hexlet.repository.CourseRepository;
+import org.owasp.html.HtmlPolicyBuilder;
+import org.owasp.html.PolicyFactory;
 
 public class HelloWorld {
 
@@ -37,6 +42,21 @@ public class HelloWorld {
             var header = "There are courses of programming";
             var page = new CoursesPage(courses, header);
             ctx.render("courses/index.jte", Collections.singletonMap("page", page));
+        });
+
+        app.get("/users/{id}", ctx -> {
+            var id = ctx.pathParam("id");
+//            var escapedId = StringEscapeUtils.escapeHtml4(id);
+//            PolicyFactory policy = new HtmlPolicyBuilder()
+//                    .allowElements("a")
+//                    .allowUrlProtocols("https")
+//                    .allowAttributes("href").onElements("a")
+//                    .requireRelNofollowOnLinks()
+//                    .toFactory();
+//            String safeHTML = policy.sanitize(id);
+            var user = new User(id);
+            var page = new UserPage(user);
+            ctx.render("users/show.jte", Collections.singletonMap("page", page));
         });
 
         app.get("/", ctx -> {
