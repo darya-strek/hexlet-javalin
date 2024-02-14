@@ -3,7 +3,9 @@ package org.example.hexlet;
 import io.javalin.Javalin;
 import org.apache.commons.text.StringEscapeUtils;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import org.example.hexlet.dto.courses.CoursesPage;
 import org.example.hexlet.dto.users.UserPage;
@@ -18,12 +20,21 @@ public class HelloWorld {
 
     public static void main(String[] args) {
 
-        Course php = new Course("php", "it's php");
+        Course php = new Course("PHP",
+                "PHP its wow");
         CourseRepository.save(php);
-        Course java = new Course("java", "it's java");
+        Course java = new Course("Java",
+                "Java for backend");
         CourseRepository.save(java);
-        Course python = new Course("python", "it's python");
+        Course python = new Course("Python",
+                "Python for frontend and backend");
         CourseRepository.save(python);
+        Course sql = new Course("SQL",
+                "SQL is the best");
+        CourseRepository.save(sql);
+        Course javascript = new Course("JavaScript",
+                "JavaScript for frontend");
+        CourseRepository.save(javascript);
 
         // Создаем приложение
         var app = Javalin.create(config -> {
@@ -38,9 +49,23 @@ public class HelloWorld {
         });
 
         app.get("/courses", ctx -> {
-            var courses = CourseRepository.getEntities();
+            var term = ctx.queryParam("term");
             var header = "There are courses of programming";
-            var page = new CoursesPage(courses, header);
+            List<Course> courses;
+            if (term != null) {
+                courses =  CourseRepository.getEntities()
+                        .stream()
+                        .filter(c -> {
+                            var name = c.getName().toLowerCase();
+                            var description = c.getDescription().toLowerCase();
+                            var termNormalized = term.toLowerCase();
+                            return name.contains(termNormalized) || description.contains(termNormalized);
+                        })
+                        .toList();
+            } else {
+                courses = CourseRepository.getEntities();
+            }
+            var page = new CoursesPage(courses, header, term);
             ctx.render("courses/index.jte", Collections.singletonMap("page", page));
         });
 
