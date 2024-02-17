@@ -2,7 +2,7 @@ package gg.jte.generated.ondemand.courses;
 import org.example.hexlet.dto.courses.CoursesPage;
 public final class JteindexGenerated {
 	public static final String JTE_NAME = "courses/index.jte";
-	public static final int[] JTE_LINE_INFO = {0,0,2,2,2,4,4,7,7,8,8,8,10,10,10,10,10,10,10,10,13,13,15,15,16,16,18,18,18,18,18,18,18,19,19,19,21,21,22,22,23,23,23,23,25,25,25,26};
+	public static final int[] JTE_LINE_INFO = {0,0,2,2,2,4,4,7,7,8,8,8,11,11,11,11,11,11,11,11,14,14,16,16,17,17,19,19,19,19,19,19,19,20,20,20,22,22,23,23,24,24,24,24,26,26,26,27};
 	public static void render(gg.jte.html.HtmlTemplateOutput jteOutput, gg.jte.html.HtmlInterceptor jteHtmlInterceptor, CoursesPage page) {
 		jteOutput.writeContent("\r\n");
 		gg.jte.generated.ondemand.layout.JtepageGenerated.render(jteOutput, jteHtmlInterceptor, new gg.jte.html.HtmlContent() {
@@ -10,7 +10,7 @@ public final class JteindexGenerated {
 				jteOutput.writeContent("\r\n        <h1>");
 				jteOutput.setContext("h1", null);
 				jteOutput.writeUserContent(page.getHeader());
-				jteOutput.writeContent("</h1>\r\n        <form action=\"/courses\" method=\"get\">\r\n          <input type=\"search\" name=\"term\"");
+				jteOutput.writeContent("</h1>\r\n        <a href=\"/courses/build\">New Course</a>\r\n        <form action=\"/courses\" method=\"get\">\r\n          <input type=\"search\" name=\"term\"");
 				if (gg.jte.runtime.TemplateUtils.isAttributeRendered(page.getTerm())) {
 					jteOutput.writeContent(" value=\"");
 					jteOutput.setContext("input", "value");

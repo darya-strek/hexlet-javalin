@@ -30,6 +30,8 @@ dependencies {
     implementation("org.apache.commons:commons-text:1.11.0")
     implementation("com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer:20180219.1")
 
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.15.0")
+
     implementation("gg.jte:jte:3.0.1")
     implementation("io.javalin:javalin-rendering:5.6.2")
     implementation("io.javalin:javalin:5.6.1")

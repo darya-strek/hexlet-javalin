@@ -7,5 +7,5 @@ import org.example.hexlet.model.User;
 @Getter
 @AllArgsConstructor
 public class UserPage {
-    private User user;
+    public User user;
 }

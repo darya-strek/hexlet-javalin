@@ -5,6 +5,7 @@
 @template.layout.page(
     content = @`
         <h1>${page.getHeader()}</h1>
+        <a href="/courses/build">New Course</a>
         <form action="/courses" method="get">
           <input type="search" name="term" value="${page.getTerm()}" />
           <input type="submit" value="Search" />
