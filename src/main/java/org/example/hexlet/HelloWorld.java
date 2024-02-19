@@ -1,6 +1,7 @@
 package org.example.hexlet;
 
 import io.javalin.Javalin;
+import io.javalin.validation.ValidationException;
 import org.apache.commons.text.StringEscapeUtils;
 
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.example.hexlet.dto.courses.CoursesPage;
+import org.example.hexlet.dto.users.BuildUserPage;
 import org.example.hexlet.dto.users.UserPage;
 import org.example.hexlet.dto.users.UsersPage;
 import org.example.hexlet.model.Course;
@@ -84,7 +86,8 @@ public class HelloWorld {
         });
 
         app.get("/users/build", ctx -> {
-            ctx.render("users/build.jte");
+            var page = new BuildUserPage();
+            ctx.render("users/build.jte", Collections.singletonMap("page", page));
         });
 
         app.get("/users/{id}", ctx -> {
@@ -105,13 +108,25 @@ public class HelloWorld {
 
         app.post("/users", ctx -> {
             var name = ctx.formParam("name").trim();
-            var email = ctx.formParam("email").trim().toLowerCase();
-            var password = ctx.formParam("password").trim();
-            var passwordConfirmation = ctx.formParam("passwordConfirmation");
 
-            var user = new User(name, email, password);
-            UserRepository.save(user);
-            ctx.redirect("/users");
+            var email = ctx.formParam("email").trim().toLowerCase();
+
+            try {
+
+
+                var passwordConfirmation = ctx.formParam("passwordConfirmation");
+                var password = ctx.formParamAsClass("password", String.class)
+                        .check(v -> v.equals(passwordConfirmation), "Пароли не совпадают")
+                        .check(v -> v.length() > 8, "Недостаточная длина пароля")
+                        .get();
+
+                var user = new User(name, email, password);
+                UserRepository.save(user);
+                ctx.redirect("/users");
+            } catch (ValidationException e) {
+                var page = new BuildUserPage(name, email, e.getErrors());
+                ctx.render("users/build.jte", Collections.singletonMap("page", page));
+            }
         });
 
         app.get("/users", ctx -> {
