@@ -21,6 +21,7 @@ dependencies {
     // Версии зависимостей могут отличаться
     // Здесь мы сразу подключаем зависимости,
     // которые понадобятся во время обучения
+
     compileOnly ("org.projectlombok:lombok:1.18.30")
     annotationProcessor ("org.projectlombok:lombok:1.18.30")
 
@@ -43,7 +44,9 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
 }
 
-
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
+}
 
 tasks.test {
     useJUnitPlatform()

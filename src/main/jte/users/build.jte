@@ -5,12 +5,11 @@
 <!doctype html>
 <html lang="en">
     <head>
-    <meta charset="utf-8" />
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>New user</title>
     </head>
     <body>
-
         @if(page.getErrors() != null)
             <ul>
                 @for(var validator : page.getErrors().values())
@@ -48,6 +47,5 @@
           </div>
           <input type="submit" value="Зарегистрировать" />
         </form>
-
     </body>
 </html>
