@@ -10,7 +10,6 @@
     <title>New course</title>
     </head>
     <body>
-        <body>
             @if(page.getErrors() != null)
                 <ul>
                     @for(var validator : page.getErrors().values())
@@ -36,6 +35,5 @@
           </div>
           <input type="submit" value="Сохранить" />
         </form>
-
     </body>
 </html>
