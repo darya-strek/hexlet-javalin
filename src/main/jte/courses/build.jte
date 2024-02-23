@@ -10,15 +10,15 @@
     <title>New course</title>
     </head>
     <body>
-            @if(page.getErrors() != null)
-                <ul>
-                    @for(var validator : page.getErrors().values())
-                        @for(var error : validator)
-                            <li>${error.getMessage()}</li>
-                        @endfor
+        @if(page.getErrors() != null)
+            <ul>
+                @for(var validator : page.getErrors().values())
+                    @for(var error : validator)
+                        <li>${error.getMessage()}</li>
                     @endfor
-                </ul>
-            @endif
+                @endfor
+            </ul>
+        @endif
 
         <form action="/courses" method="post">
           <div>

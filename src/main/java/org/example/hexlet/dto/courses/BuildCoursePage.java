@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.Map;
 
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 public class BuildCoursePage {
     private String name;
     private String description;
