@@ -9,5 +9,4 @@ import lombok.Getter;
 @Getter
 public class CoursePage {
     private Course course;
-
 }

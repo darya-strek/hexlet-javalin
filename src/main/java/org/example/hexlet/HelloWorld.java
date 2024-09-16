@@ -25,6 +25,8 @@ public class HelloWorld {
             ctx.result("Hello, " + name + "!");
         });
 
+        app.get("/", ctx -> ctx.render("index.jte"));
+
         app.get("/courses/build", ctx -> {
         });
 
@@ -60,7 +62,7 @@ public class HelloWorld {
             ctx.result("User ID: " + userId + " Post ID: " + postId);
         });
 
-        app.get("/", ctx -> ctx.render("index.jte"));
+
 
         app.start(7070);
     }
