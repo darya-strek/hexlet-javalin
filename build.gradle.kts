@@ -32,7 +32,7 @@ dependencies {
     implementation("com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer:20180219.1")
 
     implementation("com.fasterxml.jackson.core:jackson-databind:2.15.0")
-
+    implementation("net.datafaker:datafaker:2.0.1")
     implementation("io.javalin:javalin:6.1.3")
     implementation("org.slf4j:slf4j-simple:2.0.7")
     implementation("io.javalin:javalin-rendering:6.1.3")
