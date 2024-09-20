@@ -11,4 +11,6 @@ import java.util.List;
 public class CoursesPage {
     private List<Course> courses;
     private String header;
+    private String term;
+    private String description;
 }

@@ -6,6 +6,7 @@ import io.javalin.http.NotFoundResponse;
 import io.javalin.rendering.template.JavalinJte;
 import static io.javalin.rendering.template.TemplateUtil.model;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.example.hexlet.dto.courses.CoursePage;
 import org.example.hexlet.dto.courses.CoursesPage;
@@ -58,11 +59,28 @@ public class HelloWorld {
         });
 
         app.get("/courses", ctx -> {
-            var courses = COURSES.stream()
-                    .sorted(Comparator.comparing(Course::getId))
-                    .collect(Collectors.toList());
+            var term = ctx.queryParam("term");
+            var description = ctx.queryParam("description");
+            var courses = COURSES;
+            if (term != null) {
+                courses.stream()
+                        .sorted(Comparator.comparing(Course::getId))
+                        .filter(course -> StringUtils.containsIgnoreCase(course.getName(), term))
+                        .collect(Collectors.toList());
+            } else if (description != null) {
+                courses.stream()
+                        .sorted(Comparator.comparing(Course::getId))
+                        .filter(course -> StringUtils.containsIgnoreCase(course.getDescription(), description))
+                        .collect(Collectors.toList());
+            } else {
+                courses.stream()
+                        .sorted(Comparator.comparing(Course::getId))
+                        .collect(Collectors.toList());
+            }
+
             var header = "Курсы по програмированию";
-            var page = new CoursesPage(courses, header);
+
+            var page = new CoursesPage(courses, header, term, description);
             ctx.render("courses/index.jte", model("page", page));
         });
 
