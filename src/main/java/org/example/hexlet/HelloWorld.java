@@ -61,21 +61,27 @@ public class HelloWorld {
         app.get("/courses", ctx -> {
             var term = ctx.queryParam("term");
             var description = ctx.queryParam("description");
-            var courses = COURSES;
+            List<Course> courses = new ArrayList<>(COURSES) {
+            };
+
+            if (term == null && description == null) {
+                courses = courses.stream()
+                        .sorted(Comparator.comparing(Course::getId))
+                        .toList();
+            }
+
             if (term != null) {
-                courses.stream()
+                courses = courses.stream()
                         .sorted(Comparator.comparing(Course::getId))
                         .filter(course -> StringUtils.containsIgnoreCase(course.getName(), term))
-                        .collect(Collectors.toList());
-            } else if (description != null) {
-                courses.stream()
+                        .toList();
+            }
+
+            if (description != null) {
+                courses = courses.stream()
                         .sorted(Comparator.comparing(Course::getId))
                         .filter(course -> StringUtils.containsIgnoreCase(course.getDescription(), description))
-                        .collect(Collectors.toList());
-            } else {
-                courses.stream()
-                        .sorted(Comparator.comparing(Course::getId))
-                        .collect(Collectors.toList());
+                        .toList();
             }
 
             var header = "Курсы по програмированию";
@@ -123,7 +129,7 @@ public class HelloWorld {
         app.get("/users", ctx -> {
             var users = USERS.stream()
                     .sorted(Comparator.comparing(User::getId))
-                    .collect(Collectors.toList());
+                    .toList();
             var page = new UsersPage(users);
             ctx.render("users/index.jte", model("page", page));
         });

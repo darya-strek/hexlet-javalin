@@ -8,9 +8,9 @@
         <a href="/courses/build">New Course</a>
 
         <form action="/courses" method="get">
-          <input type="search" name="term" value="${page.getTerm()}">
-          <input type="search" name="description" value="${page.getDescription()}">
-          <input type="submit" value="Search">
+          <p><span>Search by name:</span><input type="search" name="term" value="${page.getTerm()}"></p>
+          <p><span>Search by description:</span><input type="search" name="description" value="${page.getDescription()}"></p>
+          <p><input type="submit" value="Search"></p>
         </form>
 
         @if(page.getCourses().isEmpty())
