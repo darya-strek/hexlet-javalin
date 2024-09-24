@@ -4,20 +4,17 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@ToString
 @Getter
 @Setter
-public class User {
-    private long id;
-    private String firstName;
-    @ToString.Include
-    private String lastName;
+public final class User {
+    private Long id;
+    private String name;
     private String email;
+    private String password;
 
-    public User(long id, String firstName, String lastName, String email) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public User(String name, String email, String password) {
+        this.name = name;
         this.email = email;
+        this.password = password;
     }
 }

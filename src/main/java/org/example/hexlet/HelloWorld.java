@@ -14,6 +14,8 @@ import org.example.hexlet.dto.users.UserPage;
 import org.example.hexlet.dto.users.UsersPage;
 import org.example.hexlet.model.Course;
 import org.example.hexlet.model.User;
+import org.example.hexlet.repository.CourseRepository;
+import org.example.hexlet.repository.UserRepository;
 import org.owasp.html.HtmlPolicyBuilder;
 import org.owasp.html.PolicyFactory;
 
@@ -40,6 +42,7 @@ public class HelloWorld {
         });
 
         app.get("/courses/build", ctx -> {
+            ctx.render("courses/build.jte");
         });
 
         app.get("/courses/{courseId}/lessons/{id}", ctx -> {
@@ -50,10 +53,7 @@ public class HelloWorld {
 
         app.get("/courses/{id}", ctx -> {
             var courseId = ctx.pathParamAsClass("id", Long.class).get();
-            var course = COURSES.stream()
-                    .filter(u -> Objects.equals(u.getId(), courseId))
-                    .findFirst()
-                    .orElseThrow(() -> new NotFoundResponse("User not found"));
+            var course = CourseRepository.find(courseId).get();
             var page = new CoursePage(course);
             ctx.render("courses/show.jte", model("page", page));
         });
@@ -61,26 +61,17 @@ public class HelloWorld {
         app.get("/courses", ctx -> {
             var term = ctx.queryParam("term");
             var description = ctx.queryParam("description");
-            List<Course> courses = new ArrayList<>(COURSES) {
-            };
-
-            if (term == null && description == null) {
-                courses = courses.stream()
+            var courses = CourseRepository.getEntities().stream()
                         .sorted(Comparator.comparing(Course::getId))
                         .toList();
-            }
 
             if (term != null) {
-                courses = courses.stream()
-                        .sorted(Comparator.comparing(Course::getId))
-                        .filter(course -> StringUtils.containsIgnoreCase(course.getName(), term))
-                        .toList();
+                courses = CourseRepository.search(term);
             }
 
             if (description != null) {
                 courses = courses.stream()
-                        .sorted(Comparator.comparing(Course::getId))
-                        .filter(course -> StringUtils.containsIgnoreCase(course.getDescription(), description))
+                        .filter(course -> course.getDescription().toLowerCase().contains(description.toLowerCase()))
                         .toList();
             }
 
@@ -88,6 +79,19 @@ public class HelloWorld {
 
             var page = new CoursesPage(courses, header, term, description);
             ctx.render("courses/index.jte", model("page", page));
+        });
+
+        app.post("/courses", ctx -> {
+            var name = ctx.formParam("name").trim();
+            var description = ctx.formParam("description");
+
+            var course = new Course(name, description);
+            CourseRepository.save(course);
+            ctx.redirect("/courses");
+        });
+
+        app.get("/users/build", ctx -> {
+            ctx.render("users/build.jte");
         });
 
         app.get("/users/{id}/post/{postId}", ctx -> {
@@ -98,10 +102,46 @@ public class HelloWorld {
 
         app.get("/users/{id}", ctx -> {
             var id = ctx.pathParamAsClass("id", Long.class).get();
-            var user = new User(id, "May", "Petters", "e@mail.com");
+            var user = UserRepository.find(id).get();
             var page = new UserPage(user);
             ctx.render("users/show.jte", model("page", page));
         });
+
+        app.get("/users", ctx -> {
+            var term = ctx.queryParam("term");
+            var users = UserRepository.getEntities().stream()
+                    .sorted(Comparator.comparing(User::getId))
+                    .toList();
+
+            if (term != null) {
+                users = UserRepository.search(term);
+            }
+
+            var page = new UsersPage(users, term);
+            ctx.render("users/index.jte", model("page", page));
+        });
+
+        app.post("/users", ctx -> {
+            var name = ctx.formParam("name").trim();
+            var email = ctx.formParam("email").trim().toLowerCase();
+            var password = ctx.formParam("password");
+            var passwordConfirmation = ctx.formParam("passwordConfirmation");
+
+            var user = new User(name, email, password);
+            UserRepository.save(user);
+            ctx.redirect("/users");
+        });
+
+        app.get("/", ctx -> ctx.render("index.jte"));
+
+        app.start(7070);
+    }
+}
+//    public static void show(Context ctx) {
+//        var id = ctx.pathParamAsClass("id", Long.class).get();
+//        var user = UserRepository.find(id)
+//                .orElseThrow(() -> new NotFoundResponse("Entity with id = " + id + " not found"));
+//    }
 
 //        app.get("/users/{id}", ctx -> {
 //            var id = ctx.pathParam("id");
@@ -126,23 +166,4 @@ public class HelloWorld {
 //            ctx.render("users/show.jte", model("page", page));
 //        });
 
-        app.get("/users", ctx -> {
-            var users = USERS.stream()
-                    .sorted(Comparator.comparing(User::getId))
-                    .toList();
-            var page = new UsersPage(users);
-            ctx.render("users/index.jte", model("page", page));
-        });
-
-        app.get("/", ctx -> ctx.render("index.jte"));
-
-        app.start(7070);
-    }
-
-//    public static void show(Context ctx) {
-//        var id = ctx.pathParamAsClass("id", Long.class).get();
-//        var user = UserRepository.find(id)
-//                .orElseThrow(() -> new NotFoundResponse("Entity with id = " + id + " not found"));
-//    }
-}
 

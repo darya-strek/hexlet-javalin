@@ -1,6 +1,7 @@
 package org.example.hexlet;
 
 import org.example.hexlet.model.Course;
+import org.example.hexlet.repository.CourseRepository;
 
 //import net.datafaker.Faker;
 
@@ -15,37 +16,31 @@ public class CoursesData {
     public static List<Course> getCourses() {
 
         var course1 = new Course("Java", "Description of Java Course");
-        course1.setId(1L);
-        var course2 = new Course("PHP", "PHP Course");
-        course2.setId(2L);
-        var course3 = new Course("JavaScript", "Description of JavaScript");
-        course3.setId(3L);
-        var course4 = new Course("Python", "Python Course");
-        course4.setId(4L);
-        var course5 = new Course("Go", "Description of Go Course");
-        course5.setId(5L);
-        var course6 = new Course("C++", "C++");
-        course6.setId(6L);
-        var course7 = new Course("Ruby", "Description of Ruby Course");
-        course7.setId(7L);
-        var course8 = new Course("C#", "C# Course");
-        course8.setId(8L);
-        var course9 = new Course("SQL", "Description of SQL");
-        course9.setId(9L);
-        var course10 = new Course("HTML", "HTML");
-        course10.setId(10L);
+        CourseRepository.save(course1);
 
-        var courses = new ArrayList<Course>();
-        courses.add(course1);
-        courses.add(course2);
-        courses.add(course3);
-        courses.add(course4);
-        courses.add(course5);
-        courses.add(course6);
-        courses.add(course7);
-        courses.add(course8);
-        courses.add(course9);
-        courses.add(course10);
+        var course2 = new Course("PHP", "PHP Course");
+        CourseRepository.save(course2);
+
+        var course3 = new Course("JavaScript", "Description of JavaScript");
+        CourseRepository.save(course3);
+
+        var course4 = new Course("Python", "Python Course");
+        CourseRepository.save(course4);
+
+        var course5 = new Course("Go", "Description of Go Course");
+        CourseRepository.save(course5);
+
+        var courses = CourseRepository.getEntities();
+
+        return courses;
+    }
+
+    public static long getNextId() {
+        long id = ++idCounter;
+        return id;
+    }
+}
+
 
 //        Random random = new Random(123);
 //        Faker faker = new Faker(new Locale("en"), random);
@@ -66,12 +61,9 @@ public class CoursesData {
 //            course.setId(id);
 //            courses.add(course);
 //        }
-
-        return courses;
-    }
-
-    public static long getNextId() {
-        long id = ++idCounter;
-        return id;
-    }
-}
+//
+//        var course6 = new Course("C++", "C++");
+//        var course7 = new Course("Ruby", "Description of Ruby Course");
+//        var course8 = new Course("C#", "C# Course");
+//        var course9 = new Course("SQL", "Description of SQL");
+//        var course10 = new Course("HTML", "HTML");
