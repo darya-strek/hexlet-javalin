@@ -6,10 +6,13 @@ import io.javalin.http.NotFoundResponse;
 import io.javalin.rendering.template.JavalinJte;
 import static io.javalin.rendering.template.TemplateUtil.model;
 
+import io.javalin.validation.ValidationException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
+import org.example.hexlet.dto.courses.BuildCoursePage;
 import org.example.hexlet.dto.courses.CoursePage;
 import org.example.hexlet.dto.courses.CoursesPage;
+import org.example.hexlet.dto.users.BuildUserPage;
 import org.example.hexlet.dto.users.UserPage;
 import org.example.hexlet.dto.users.UsersPage;
 import org.example.hexlet.model.Course;
@@ -42,7 +45,8 @@ public class HelloWorld {
         });
 
         app.get("/courses/build", ctx -> {
-            ctx.render("courses/build.jte");
+            var page = new BuildCoursePage();
+            ctx.render("courses/build.jte", model("page", page));
         });
 
         app.get("/courses/{courseId}/lessons/{id}", ctx -> {
@@ -85,13 +89,27 @@ public class HelloWorld {
             var name = ctx.formParam("name").trim();
             var description = ctx.formParam("description");
 
-            var course = new Course(name, description);
-            CourseRepository.save(course);
-            ctx.redirect("/courses");
+            try {
+                var checkedName = ctx.formParamAsClass("name", String.class)
+                        .check(value -> value.length() > 2, "Название курса должно быть длиннее 2 символов")
+                        .get();
+
+                var checkedDescription = ctx.formParamAsClass("description", String.class)
+                        .check(value -> value.length() > 10, "Описание должно быть длинее 10 символов")
+                        .get();
+
+                var course = new Course(checkedName, checkedDescription);
+                CourseRepository.save(course);
+                ctx.redirect("/courses");
+            } catch (ValidationException e) {
+                var page = new BuildCoursePage(name, description, e.getErrors());
+                ctx.render("courses/build.jte", model("page", page));
+            }
         });
 
         app.get("/users/build", ctx -> {
-            ctx.render("users/build.jte");
+            var page = new BuildUserPage();
+            ctx.render("users/build.jte", model("page", page));
         });
 
         app.get("/users/{id}/post/{postId}", ctx -> {
@@ -123,13 +141,33 @@ public class HelloWorld {
 
         app.post("/users", ctx -> {
             var name = ctx.formParam("name").trim();
-            var email = ctx.formParam("email").trim().toLowerCase();
-            var password = ctx.formParam("password");
-            var passwordConfirmation = ctx.formParam("passwordConfirmation");
 
-            var user = new User(name, email, password);
-            UserRepository.save(user);
-            ctx.redirect("/users");
+            try {
+                var passwordConfirmation = ctx.formParam("passwordConfirmation");
+                var password = ctx.formParamAsClass("password", String.class)
+                        .check(value -> value.equals(passwordConfirmation), "Пароли не совпадают")
+                        .check(value -> value.length() > 6, "Длина пароля должна быть длинее 6 символов")
+                        .get();
+
+                var email = ctx.formParamAsClass("email", String.class)
+                        .check(value -> {
+                            for (var user : UserRepository.getEntities()) {
+                                var emailForCheking = value.trim().toLowerCase();
+                                if (emailForCheking.equals(user.getEmail())) {
+                                    return false;
+                                }
+                            }
+                            return true;
+                        }, "Пользователь с таким email уже существует")
+                        .get();
+
+                var user = new User(name, email, password);
+                UserRepository.save(user);
+                ctx.redirect("/users");
+            } catch (ValidationException e) {
+                var page = new BuildUserPage(name, e.getErrors());
+                ctx.render("users/build.jte", model("page", page));
+            }
         });
 
         app.get("/", ctx -> ctx.render("index.jte"));
