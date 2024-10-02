@@ -9,6 +9,8 @@ import static io.javalin.rendering.template.TemplateUtil.model;
 import io.javalin.validation.ValidationException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
+import org.example.hexlet.controller.CoursesController;
+import org.example.hexlet.controller.UsersController;
 import org.example.hexlet.dto.courses.BuildCoursePage;
 import org.example.hexlet.dto.courses.CoursePage;
 import org.example.hexlet.dto.courses.CoursesPage;
@@ -44,23 +46,7 @@ public class HelloWorld {
             ctx.result("Hello, " + name + "!!!");
         });
 
-        app.get(NamedRoutes.buildCoursePath(), ctx -> {
-            var page = new BuildCoursePage();
-            ctx.render("courses/build.jte", model("page", page));
-        });
-
-        app.get("/courses/{courseId}/lessons/{id}", ctx -> {
-            var courseId = ctx.pathParam("courseId");
-            var lessonId = ctx.pathParam("id");
-            ctx.result("Course ID: " + courseId + " Lesson ID: " + lessonId);
-        });
-
-        app.get(NamedRoutes.coursePath("{id}"), ctx -> {
-            var courseId = ctx.pathParamAsClass("id", Long.class).get();
-            var course = CourseRepository.find(courseId).get();
-            var page = new CoursePage(course);
-            ctx.render("courses/show.jte", model("page", page));
-        });
+//        Курсы
 
         app.get(NamedRoutes.coursesPath(), ctx -> {
             var term = ctx.queryParam("term");
@@ -85,6 +71,10 @@ public class HelloWorld {
             ctx.render("courses/index.jte", model("page", page));
         });
 
+        app.get(NamedRoutes.coursePath("{id}"), CoursesController::show);
+
+        app.get(NamedRoutes.buildCoursePath(), CoursesController::build);
+
         app.post(NamedRoutes.coursesPath(), ctx -> {
             var name = ctx.formParam("name").trim();
             var description = ctx.formParam("description");
@@ -107,23 +97,7 @@ public class HelloWorld {
             }
         });
 
-        app.get(NamedRoutes.buildUserPath(), ctx -> {
-            var page = new BuildUserPage();
-            ctx.render("users/build.jte", model("page", page));
-        });
-
-        app.get("/users/{id}/post/{postId}", ctx -> {
-            var userId = ctx.pathParam("id");
-            var postId = ctx.pathParam("postId");
-            ctx.result("User ID: " + userId + " Post ID: " + postId);
-        });
-
-        app.get(NamedRoutes.userPath("{id}"), ctx -> {
-            var id = ctx.pathParamAsClass("id", Long.class).get();
-            var user = UserRepository.find(id).get();
-            var page = new UserPage(user);
-            ctx.render("users/show.jte", model("page", page));
-        });
+//        Пользователи
 
         app.get(NamedRoutes.usersPath(), ctx -> {
             var term = ctx.queryParam("term");
@@ -138,6 +112,10 @@ public class HelloWorld {
             var page = new UsersPage(users, term);
             ctx.render("users/index.jte", model("page", page));
         });
+
+        app.get(NamedRoutes.userPath("{id}"), UsersController::show);
+
+        app.get(NamedRoutes.buildUserPath(), UsersController::build);
 
         app.post(NamedRoutes.usersPath(), ctx -> {
             var name = ctx.formParam("name").trim();
@@ -169,6 +147,8 @@ public class HelloWorld {
                 ctx.render("users/build.jte", model("page", page));
             }
         });
+
+//        Главная
 
         app.get(NamedRoutes.mainPath(), ctx -> ctx.render("index.jte"));
 
@@ -202,6 +182,18 @@ public class HelloWorld {
 //                    .orElseThrow(() -> new NotFoundResponse("User not found"));
 //            var page = new UserPage(user);
 //            ctx.render("users/show.jte", model("page", page));
+//        });
+
+//        app.get("/users/{id}/post/{postId}", ctx -> {
+//            var userId = ctx.pathParam("id");
+//            var postId = ctx.pathParam("postId");
+//            ctx.result("User ID: " + userId + " Post ID: " + postId);
+//        });
+
+//        app.get("/courses/{courseId}/lessons/{id}", ctx -> {
+//            var courseId = ctx.pathParam("courseId");
+//            var lessonId = ctx.pathParam("id");
+//            ctx.result("Course ID: " + courseId + " Lesson ID: " + lessonId);
 //        });
 
 

@@ -28,6 +28,10 @@ public class CourseRepository {
         return course;
     }
 
+    public static void delete(Long id) {
+        entities.remove(id);
+    }
+
     public static List<Course> getEntities() {
         return entities;
     }

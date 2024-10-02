@@ -13,4 +13,8 @@ public class CoursesPage {
     private String header;
     private String term;
     private String description;
+
+    public CoursesPage(List<Course> courses) {
+        this.courses = courses;
+    }
 }
