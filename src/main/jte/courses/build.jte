@@ -1,12 +1,9 @@
+@import org.example.hexlet.NamedRoutes
 @import org.example.hexlet.dto.courses.BuildCoursePage
 @param BuildCoursePage page
 
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title>New course</title>
-    </head>
-    <body>
+@template.layout.page(
+    content = @`
         @if(page.getErrors() != null)
             <ul>
                 @for(var validator : page.getErrors().values())
@@ -17,7 +14,7 @@
             </ul>
         @endif
 
-        <form action="/courses" method="post">
+        <form action="${NamedRoutes.coursesPath()}" method="post">
           <div>
             <label>
               Название курса
@@ -32,5 +29,5 @@
           </div>
           <input type="submit" value="Зарегистрировать" />
         </form>
-    </body>
-</html>
+    `
+)

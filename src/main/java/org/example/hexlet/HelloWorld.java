@@ -39,12 +39,12 @@ public class HelloWorld {
             config.fileRenderer(new JavalinJte());
         });
 
-        app.get("/hello", ctx -> {
+        app.get(NamedRoutes.helloPath(), ctx -> {
             var name = ctx.queryParamAsClass("name", String.class).getOrDefault("World");
             ctx.result("Hello, " + name + "!!!");
         });
 
-        app.get("/courses/build", ctx -> {
+        app.get(NamedRoutes.buildCoursePath(), ctx -> {
             var page = new BuildCoursePage();
             ctx.render("courses/build.jte", model("page", page));
         });
@@ -55,14 +55,14 @@ public class HelloWorld {
             ctx.result("Course ID: " + courseId + " Lesson ID: " + lessonId);
         });
 
-        app.get("/courses/{id}", ctx -> {
+        app.get(NamedRoutes.coursePath("{id}"), ctx -> {
             var courseId = ctx.pathParamAsClass("id", Long.class).get();
             var course = CourseRepository.find(courseId).get();
             var page = new CoursePage(course);
             ctx.render("courses/show.jte", model("page", page));
         });
 
-        app.get("/courses", ctx -> {
+        app.get(NamedRoutes.coursesPath(), ctx -> {
             var term = ctx.queryParam("term");
             var description = ctx.queryParam("description");
             var courses = CourseRepository.getEntities().stream()
@@ -85,7 +85,7 @@ public class HelloWorld {
             ctx.render("courses/index.jte", model("page", page));
         });
 
-        app.post("/courses", ctx -> {
+        app.post(NamedRoutes.coursesPath(), ctx -> {
             var name = ctx.formParam("name").trim();
             var description = ctx.formParam("description");
 
@@ -100,14 +100,14 @@ public class HelloWorld {
 
                 var course = new Course(checkedName, checkedDescription);
                 CourseRepository.save(course);
-                ctx.redirect("/courses");
+                ctx.redirect(NamedRoutes.coursesPath());
             } catch (ValidationException e) {
                 var page = new BuildCoursePage(name, description, e.getErrors());
                 ctx.render("courses/build.jte", model("page", page));
             }
         });
 
-        app.get("/users/build", ctx -> {
+        app.get(NamedRoutes.buildUserPath(), ctx -> {
             var page = new BuildUserPage();
             ctx.render("users/build.jte", model("page", page));
         });
@@ -118,14 +118,14 @@ public class HelloWorld {
             ctx.result("User ID: " + userId + " Post ID: " + postId);
         });
 
-        app.get("/users/{id}", ctx -> {
+        app.get(NamedRoutes.userPath("{id}"), ctx -> {
             var id = ctx.pathParamAsClass("id", Long.class).get();
             var user = UserRepository.find(id).get();
             var page = new UserPage(user);
             ctx.render("users/show.jte", model("page", page));
         });
 
-        app.get("/users", ctx -> {
+        app.get(NamedRoutes.usersPath(), ctx -> {
             var term = ctx.queryParam("term");
             var users = UserRepository.getEntities().stream()
                     .sorted(Comparator.comparing(User::getId))
@@ -139,7 +139,7 @@ public class HelloWorld {
             ctx.render("users/index.jte", model("page", page));
         });
 
-        app.post("/users", ctx -> {
+        app.post(NamedRoutes.usersPath(), ctx -> {
             var name = ctx.formParam("name").trim();
 
             try {
@@ -163,14 +163,14 @@ public class HelloWorld {
 
                 var user = new User(name, email, password);
                 UserRepository.save(user);
-                ctx.redirect("/users");
+                ctx.redirect(NamedRoutes.usersPath());
             } catch (ValidationException e) {
                 var page = new BuildUserPage(name, e.getErrors());
                 ctx.render("users/build.jte", model("page", page));
             }
         });
 
-        app.get("/", ctx -> ctx.render("index.jte"));
+        app.get(NamedRoutes.mainPath(), ctx -> ctx.render("index.jte"));
 
         app.start(7070);
     }
@@ -181,7 +181,7 @@ public class HelloWorld {
 //                .orElseThrow(() -> new NotFoundResponse("Entity with id = " + id + " not found"));
 //    }
 
-//        app.get("/users/{id}", ctx -> {
+//        app.get(NamedRoutes.userPath("{id}"), ctx -> {
 //            var id = ctx.pathParam("id");
 //            PolicyFactory policy = new HtmlPolicyBuilder()
 //                    .allowElements("a")
@@ -194,7 +194,7 @@ public class HelloWorld {
 //            ctx.result(safeHTML);
 //        });
 
-//        app.get("/users/{id}", ctx -> {
+//        app.get(NamedRoutes.userPath("{id}"), ctx -> {
 //            var userId = ctx.pathParamAsClass("id", Long.class).get();
 //            var user = USERS.stream()
 //                    .filter(u -> Objects.equals(u.getId(), userId))

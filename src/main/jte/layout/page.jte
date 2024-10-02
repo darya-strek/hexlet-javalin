@@ -1,3 +1,4 @@
+@import org.example.hexlet.NamedRoutes
 @import gg.jte.Content
 @import org.example.hexlet.dto.courses.CoursesPage
 
@@ -19,9 +20,9 @@
     <body>
         <h1>Darya's first test site</h1>
         <p>
-          <a href="/">Main page  </a>
-          <a href="/users">Users  </a>
-          <a href="/courses">Courses</a>
+          <a href="${NamedRoutes.mainPath()}">Main page  </a>
+          <a href="${NamedRoutes.usersPath()}">Users  </a>
+          <a href="${NamedRoutes.coursesPath()}">Courses</a>
         </p>
         <div>
             ${content}
