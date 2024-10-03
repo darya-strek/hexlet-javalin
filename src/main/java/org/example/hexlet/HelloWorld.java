@@ -71,9 +71,9 @@ public class HelloWorld {
             ctx.render("courses/index.jte", model("page", page));
         });
 
-        app.get(NamedRoutes.coursePath("{id}"), CoursesController::show);
-
         app.get(NamedRoutes.buildCoursePath(), CoursesController::build);
+
+        app.get(NamedRoutes.coursePath("{id}"), CoursesController::show);
 
         app.post(NamedRoutes.coursesPath(), ctx -> {
             var name = ctx.formParam("name").trim();
@@ -113,9 +113,9 @@ public class HelloWorld {
             ctx.render("users/index.jte", model("page", page));
         });
 
-        app.get(NamedRoutes.userPath("{id}"), UsersController::show);
-
         app.get(NamedRoutes.buildUserPath(), UsersController::build);
+
+        app.get(NamedRoutes.userPath("{id}"), UsersController::show);
 
         app.post(NamedRoutes.usersPath(), ctx -> {
             var name = ctx.formParam("name").trim();
