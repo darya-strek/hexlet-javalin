@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.example.hexlet.controller.CoursesController;
 import org.example.hexlet.controller.UsersController;
+import org.example.hexlet.dto.MainPage;
 import org.example.hexlet.dto.courses.BuildCoursePage;
 import org.example.hexlet.dto.courses.CoursePage;
 import org.example.hexlet.dto.courses.CoursesPage;
@@ -150,7 +151,12 @@ public class HelloWorld {
 
 //        Главная
 
-        app.get(NamedRoutes.mainPath(), ctx -> ctx.render("index.jte"));
+        app.get(NamedRoutes.mainPath(), ctx -> {
+            var visited = Boolean.valueOf(ctx.cookie("visited"));
+            var pageMain = new MainPage(visited);
+            ctx.render("index.jte", model("pageMain", pageMain));
+            ctx.cookie("visited", String.valueOf(true));
+        });
 
         app.start(7070);
     }

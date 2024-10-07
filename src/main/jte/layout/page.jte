@@ -1,10 +1,12 @@
 @import org.example.hexlet.NamedRoutes
 @import gg.jte.Content
 @import org.example.hexlet.dto.courses.CoursesPage
+@import org.example.hexlet.dto.MainPage
 
 @param CoursesPage page = null
 @param Content content
 @param Content footer = null
+@param MainPage pageMain
 
 <!doctype html>
 <html lang="en">
@@ -24,6 +26,12 @@
           <a href="${NamedRoutes.usersPath()}">Users  </a>
           <a href="${NamedRoutes.coursesPath()}">Courses</a>
         </p>
+        <div>
+          <h1>Привет, Хекслет!</h1>
+          @if(!pageMain.isVisited())
+            Это сообщение показывается только один раз. Если вы хотите увидеть его снова, сотрите куки
+          @endif
+        </div>
         <div>
             ${content}
         </div>
