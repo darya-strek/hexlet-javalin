@@ -153,8 +153,8 @@ public class HelloWorld {
 
         app.get(NamedRoutes.mainPath(), ctx -> {
             var visited = Boolean.valueOf(ctx.cookie("visited"));
-            var pageMain = new MainPage(visited);
-            ctx.render("index.jte", model("pageMain", pageMain));
+            var page = new MainPage(visited);
+            ctx.render("index.jte", model("page", page));
             ctx.cookie("visited", String.valueOf(true));
         });
 
