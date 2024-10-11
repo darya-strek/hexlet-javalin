@@ -20,9 +20,10 @@
     <body>
         <h1>Darya's first test site</h1>
         <p>
-          <a href="${NamedRoutes.mainPath()}">Main page  </a>
-          <a href="${NamedRoutes.usersPath()}">Users  </a>
-          <a href="${NamedRoutes.coursesPath()}">Courses</a>
+          <a href="${NamedRoutes.mainPath()}">Main page</a><span>    </span>
+          <a href="${NamedRoutes.usersPath()}">Users</a><span>    </span>
+          <a href="${NamedRoutes.coursesPath()}">Courses</a><span>    </span>
+          <a href="${NamedRoutes.buildSessionPath()}">Login</a>
         </p>
         <div>
             ${content}

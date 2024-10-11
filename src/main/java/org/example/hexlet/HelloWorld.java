@@ -10,6 +10,7 @@ import io.javalin.validation.ValidationException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.example.hexlet.controller.CoursesController;
+import org.example.hexlet.controller.SessionsController;
 import org.example.hexlet.controller.UsersController;
 import org.example.hexlet.dto.MainPage;
 import org.example.hexlet.dto.courses.BuildCoursePage;
@@ -149,11 +150,22 @@ public class HelloWorld {
             }
         });
 
+//        Сессии
+
+        app.get(NamedRoutes.buildSessionPath(), SessionsController::build);
+
+        app.post(NamedRoutes.sessionsPath(), SessionsController::create);
+
+        app.delete(NamedRoutes.sessionsPath(), SessionsController::destroy);
+
 //        Главная
 
         app.get(NamedRoutes.mainPath(), ctx -> {
             var visited = Boolean.valueOf(ctx.cookie("visited"));
-            var page = new MainPage(visited);
+            String session = ctx.sessionAttribute("currentUser");
+
+            var page = new MainPage(visited, session);
+
             ctx.render("index.jte", model("page", page));
             ctx.cookie("visited", String.valueOf(true));
         });
