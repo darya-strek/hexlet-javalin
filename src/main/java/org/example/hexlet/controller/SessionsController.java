@@ -10,7 +10,7 @@ public class SessionsController {
     }
 
     public static void create(Context ctx) {
-        var nickname = ctx.formParam("nickname");
+        var nickname = ctx.formParam("name");
         // var password = ctx.formParam("password");
 
         // Здесь проверка пароля
