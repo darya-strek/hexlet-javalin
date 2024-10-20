@@ -57,6 +57,8 @@ public class HelloWorld {
                         .sorted(Comparator.comparing(Course::getId))
                         .toList();
 
+            String flash = ctx.consumeSessionAttribute("flash");
+
             if (term != null) {
                 courses = CourseRepository.search(term);
             }
@@ -70,6 +72,7 @@ public class HelloWorld {
             var header = "Курсы по програмированию";
 
             var page = new CoursesPage(courses, header, term, description);
+            page.setFlash(flash);
             ctx.render("courses/index.jte", model("page", page));
         });
 
@@ -92,9 +95,15 @@ public class HelloWorld {
 
                 var course = new Course(checkedName, checkedDescription);
                 CourseRepository.save(course);
+
+                ctx.sessionAttribute("flash", "Course has been created!");
                 ctx.redirect(NamedRoutes.coursesPath());
+
             } catch (ValidationException e) {
+                ctx.sessionAttribute("flash", "Course's creating has been failed!");
+                String flash = ctx.consumeSessionAttribute("flash");
                 var page = new BuildCoursePage(name, description, e.getErrors());
+                page.setFlash(flash);
                 ctx.render("courses/build.jte", model("page", page));
             }
         });
